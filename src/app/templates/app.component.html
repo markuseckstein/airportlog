@@ -1,0 +1,24 @@
+<h1>My First Angular 2 App ({{theTime}})</h1>
+<sebm-google-map
+        [latitude]="lat"
+        [longitude]="lng"
+        [zoom]="zoom"
+        (mapClick)="mapClicked($event)">
+
+    <sebm-google-map-marker
+            *ngFor="#m of markers"
+            (markerClick)="clickedMarker(m.label, m)"
+            [latitude]="m.lat"
+            [longitude]="m.lng"
+            [label]="m.label"></sebm-google-map-marker>
+
+</sebm-google-map>
+
+<hr/>
+<p>
+    Number of loaded airports: {{markers.length}}/{{numberOfAirports}} (Promises: {{numberOfPromises}})
+</p>
+<p>Selected Airport: <strong>{{selectedAirport}}</strong></p>
+<p><span *ngFor="#marker of markers">{{marker.code}}: {{marker.label}} ({{marker.lat}}/{{marker.lng}})<br/></span>
+</p>
+<button (click)="clickHandler()">Load Airports</button>
