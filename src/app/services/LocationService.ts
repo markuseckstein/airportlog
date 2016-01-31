@@ -8,9 +8,6 @@ import {
     ANGULAR2_GOOGLE_MAPS_DIRECTIVES
 } from 'angular2-google-maps/core';
 
-import {Inject} from "angular2/core";
-
-
 export class LocationService {
     constructor() {
         console.log("ctor of LocationService run");
@@ -29,6 +26,7 @@ export class LocationService {
         'FUK',
         'HAN',
         'HER',
+        'SOF, Sofia',
         'Samos',
         'HGH',
         'ICN',
@@ -49,7 +47,6 @@ export class LocationService {
         'SFO',
         'SGN',
         'SIN',
-        'SOF',
         'TXL',
         'XIY',
         'AMS'

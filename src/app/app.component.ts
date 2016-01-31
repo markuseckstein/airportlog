@@ -1,12 +1,5 @@
-/**
- * Created by marku on 05.01.2016.
- */
 
 import {Component} from 'angular2/core';
-import {Inject} from "angular2/core";
-import {Injectable} from "angular2/core";
-import { } from "angular2/core";
-import {map} from "rxjs/operator/map";
 
 import {
     MapsAPILoader,
