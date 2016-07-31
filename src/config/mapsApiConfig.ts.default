@@ -1,0 +1,1 @@
+export const mapsApiConfig = {apiKey: 'place_your_key_here'};
