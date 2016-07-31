@@ -18,6 +18,7 @@
   Number of loaded airports: {{markers.length}}
 </p>
 <p>Selected Airport: <strong>{{selectedAirport?.label}}</strong></p>
-<p><span *ngFor="let marker of markers">{{marker.code}}: {{marker.label}} ({{marker.lat}}/{{marker.lng}})<br/></span>
+<p *ngFor="let marker of markers">
+  <span class="code">{{marker.code}}</span><span>: {{marker.label}} ({{marker.lat}}/{{marker.lng}})</span>
 </p>
-<button (click)="load()">Lade Airports</button>
+<button (click)="load()">Load Airports</button>

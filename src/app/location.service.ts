@@ -18,7 +18,7 @@ export class LocationService {
     console.log('ctor of LocationService run');
     this.airports$ = this.airports.asObservable();
     _mapsApiLoader.load()
-      .then((m) => {
+      .then(() => {
         this.geocoder = new google.maps.Geocoder();
         console.debug('Maps api initialized:', this.geocoder);
         // this.loadAirports();
@@ -27,12 +27,17 @@ export class LocationService {
 
 
   public loadAirports() {
+    // Note: this is for throtteling the geocode requests.
+    // Google doesn't like batch requests on their free API.
+    let someFastTriggers = Observable.interval(50).take(3);
+    let oneSlowTrigger = Observable.timer(3000);
+
+    let triggerSequence = someFastTriggers.concat(oneSlowTrigger).repeat();
+
     let airportInterval = Observable.zip(
       Observable.from(airportCodes),
-      Observable.timer(0, 1510),
-      (item, i) => {
-        return item;
-      }
+      triggerSequence,
+      (item, i) => item
     );
 
     airportInterval
@@ -68,8 +73,6 @@ export class LocationService {
             allData: results[0],
             label: 'Error ' + results[1],
             title: airportCode,
-            // lat: results[0].geometry.location.lat(),
-            // lng: results[0].geometry.location.lng(),
           };
         }
       });
