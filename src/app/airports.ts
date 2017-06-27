@@ -1,4 +1,5 @@
 export const airportCodes: string[] = [
+  'AMS',
   'BOD',
   'BOM',
   'BRU',
@@ -16,6 +17,7 @@ export const airportCodes: string[] = [
   'HGH',
   'ICN',
   'JFK',
+  'KUL',
   'LAX',
   'LGW',
   'LPA',
@@ -26,6 +28,7 @@ export const airportCodes: string[] = [
   'NUE',
   'ORY',
   'PEK',
+  'PEN',
   'PHL',
   'PMI',
   'PVG',
@@ -34,5 +37,5 @@ export const airportCodes: string[] = [
   'SIN',
   'TXL',
   'XIY',
-  'AMS'
+
 ];

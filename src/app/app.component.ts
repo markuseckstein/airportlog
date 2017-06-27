@@ -1,19 +1,15 @@
+import {AgmMap} from '@agm/core';
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {GOOGLE_MAPS_DIRECTIVES} from 'angular2-google-maps/core';
 import {LocationService} from './location.service';
 import {Airport} from './shared';
-import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core/services/google-maps-api-wrapper';
-import {SebmGoogleMap} from 'angular2-google-maps/core/directives/google-map';
 
-require('../style/app.scss');
 
 @Component({
   moduleId: module.id,
-  selector: 'my-app',
+  selector: 'app-app',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.css'],
-  directives: [GOOGLE_MAPS_DIRECTIVES],
-  providers: [LocationService, GoogleMapsAPIWrapper]
+  styleUrls: ['app.component.scss'],
+  providers: [LocationService]
 })
 export class AppComponent implements OnInit {
   public selectedAirport: Airport;
@@ -25,15 +21,15 @@ export class AppComponent implements OnInit {
   }
 
   // google maps zoom level
-  zoom: number = 2;
+  zoom = 2;
 
   // initial center position for the map
-  lat: number = 51.673858;
-  lng: number = 7.815982;
+  lat = 51.673858;
+  lng = 7.815982;
 
-  @ViewChild(SebmGoogleMap) gMap:SebmGoogleMap;
+  @ViewChild(AgmMap) gMap: AgmMap;
 
-    constructor(private locationService: LocationService, private mapsApi: GoogleMapsAPIWrapper) {
+  constructor(private locationService: LocationService) {
   }
 
 
@@ -43,9 +39,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  clickedMarker($event:any, marker: Airport) {
+  clickedMarker($event: any, marker: Airport) {
     this.selectedAirport = marker;
-    console.log('Event',$event);
+    console.log('Event', $event);
   }
 
   load() {

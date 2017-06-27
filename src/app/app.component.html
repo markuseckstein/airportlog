@@ -1,17 +1,17 @@
 <h1>Airport Log</h1>
-<sebm-google-map
+<agm-map
   [latitude]="lat"
   [longitude]="lng"
   [zoom]="zoom">
 
-  <sebm-google-map-marker
+  <agm-marker
     *ngFor="let m of markers"
     (markerClick)="clickedMarker(m)"
     [latitude]="m.lat"
     [longitude]="m.lng"
-    [label]="m.label"></sebm-google-map-marker>
+    [label]="m.label"></agm-marker>
 
-</sebm-google-map>
+</agm-map>
 
 <hr/>
 <p>
