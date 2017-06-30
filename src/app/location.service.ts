@@ -1,22 +1,21 @@
 import {MapsAPILoader} from '@agm/core';
 import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/timeInterval';
-import {Observable, Subject} from 'rxjs/Rx';
+import {Observable} from 'rxjs/Rx';
 import {airportCodes} from './airports';
 import {Airport} from './shared';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {Subject} from 'rxjs/Subject';
 
 declare var google: any;
 
 @Injectable()
 export class LocationService {
-  public airports$: Observable<Airport>;
-
+  private airports: Subject<Airport> = new ReplaySubject(1);
+  public airports$: Observable<Airport> = this.airports.asObservable();
   private geocoder;
-  private airports: Subject<Airport> = new Subject<Airport>();
 
   constructor(private _mapsApiLoader: MapsAPILoader) {
-    console.log('ctor of LocationService run');
-    this.airports$ = this.airports.asObservable();
     _mapsApiLoader.load()
       .then(() => {
         Observable.timer(200).subscribe(() => {
@@ -30,36 +29,33 @@ export class LocationService {
   }
 
 
-  public loadAirports() {
+  private loadAirports(): void {
     // Note: this is for throtteling the geocode requests.
     // Google doesn't like batch requests on their free API.
-    let counter = 0;
-    const airportInterval = Observable.from(airportCodes)
-      .scan((acc, code, idx) => ({code, idx}), {})
-      .filter((x: any) => x.idx !== undefined) // TODO AMS is missing
-      .delayWhen((val: any) => {
-        const index = val.idx;
-        if (index % 8 === 0) {
+    let counter = -1;
+    let idx = 0;
+    Observable.from(airportCodes)
+      .do(() => {
+        if (idx % 6 === 0) {
           counter++;
         }
-        const waitTime = 5050 * counter;
-
-        console.log(`waitTime for ${val.code}, idx ${index} is ${waitTime}`);
+        idx++;
+      })
+      .delayWhen((code: any) => {
+        const waitTime = 3050 * counter;
+        console.log(`waitTime for ${code}, idx ${counter} is ${waitTime}`);
         return Observable.timer(waitTime);
       })
-      .map(val => val.code);
-
-    airportInterval
-      .do(x => console.log(`loading airport '${x}'`))
       .flatMap(x => this.codeAirport(x))
-      .subscribe((x: Airport) => {
-        this.airports.next(x);
+      .subscribe(airport => {
+        this.airports.next(airport);
       });
   }
 
 
   private codeAirport(airportCode: string): Observable<Airport> {
     return Observable.create(obs => {
+      console.log(`loading airport '${airportCode}'`);
       this.geocoder.geocode({
         'address': airportCode + ' Airport'
       }, (response, status) => {
@@ -68,14 +64,10 @@ export class LocationService {
           obs.complete();
         } else {
           console.log('airport: ' + airportCode, status);
-          obs.next({error: status});
-          obs.complete();
+          obs.error({error: status});
         }
       });
     })
-      .do(x => {
-        console.log('geo result', x);
-      })
       .map((results) => {
         if (results.error) {
           console.warn('Geo error:', results);
@@ -86,6 +78,7 @@ export class LocationService {
             title: airportCode,
           };
         } else {
+          console.log(`Success ${airportCode}`, results);
           const marker: Airport = {
             code: airportCode,
             allData: results[0].address_components,
@@ -96,6 +89,9 @@ export class LocationService {
           };
           return marker;
         }
-      });
+      })
+      .retryWhen(errors => errors
+        .do(val => console.log(`Error for ${airportCode}`, val))
+          .delayWhen(val => Observable.timer(Math.random() * 4000)));
   }
 }

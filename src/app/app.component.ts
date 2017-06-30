@@ -1,5 +1,4 @@
-import {AgmMap} from '@agm/core';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LocationService} from './location.service';
 import {Airport} from './shared';
 
@@ -27,8 +26,6 @@ export class AppComponent implements OnInit {
   lat = 51.673858;
   lng = 7.815982;
 
-  @ViewChild(AgmMap) gMap: AgmMap;
-
   constructor(private locationService: LocationService) {
   }
 
@@ -39,14 +36,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  clickedMarker($event: any, marker: Airport) {
+  clickedMarker(marker: Airport) {
     this.selectedAirport = marker;
-    console.log('Event', $event);
   }
-
-  load() {
-    this.locationService.loadAirports();
-  }
-
 }
 

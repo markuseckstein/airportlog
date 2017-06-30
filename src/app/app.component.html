@@ -9,7 +9,12 @@
     (markerClick)="clickedMarker(m)"
     [latitude]="m.lat"
     [longitude]="m.lng"
-    [label]="m.label"></agm-marker>
+    [title]="m.code">
+    <agm-info-window>
+      <h2>{{m.title}}</h2>
+      {{m.label}}
+    </agm-info-window>
+  </agm-marker>
 
 </agm-map>
 
@@ -21,4 +26,3 @@
 <p *ngFor="let marker of markers">
   <span class="code">{{marker.code}}</span><span>: {{marker.label}} ({{marker.lat}}/{{marker.lng}})</span>
 </p>
-<button (click)="load()">Load Airports</button>

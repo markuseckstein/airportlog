@@ -12,8 +12,8 @@ export const airportCodes: string[] = [
   'FUK',
   'HAN',
   'HER',
-  'SOF, Sofia',
-  'Samos',
+  'SOF',
+  'SMI', // Samos
   'HGH',
   'ICN',
   'JFK',
