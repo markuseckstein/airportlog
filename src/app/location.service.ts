@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/timeInterval';
 import {Observable} from 'rxjs/Rx';
 import {airportCodes} from './airports';
-import {Airport} from './shared';
+import {Airport} from './shared/airport';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Subject} from 'rxjs/Subject';
 

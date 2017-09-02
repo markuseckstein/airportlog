@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {LocationService} from './location.service';
-import {Airport} from './shared';
+import {Airport} from './shared/airport';
 
 
 @Component({
