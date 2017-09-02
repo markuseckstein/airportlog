@@ -6,16 +6,19 @@ import {airportCodes} from './airports';
 import {Airport} from './shared/airport';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Subject} from 'rxjs/Subject';
+import {StorageService} from './storage/storage.service';
 
 declare var google: any;
 
 @Injectable()
 export class LocationService {
-  private airports: Subject<Airport> = new ReplaySubject(1);
-  public airports$: Observable<Airport> = this.airports.asObservable();
+  private airports: Subject<Airport[]> = new ReplaySubject<Airport[]>(1);
+  public airports$: Observable<Airport[]> = this.airports.asObservable();
   private geocoder;
 
-  constructor(private _mapsApiLoader: MapsAPILoader) {
+  private airportArray = new Array<Airport>();
+
+  constructor(private _mapsApiLoader: MapsAPILoader, private storage: StorageService) {
     _mapsApiLoader.load()
       .then(() => {
         Observable.timer(200).subscribe(() => {
@@ -24,7 +27,7 @@ export class LocationService {
           this.loadAirports();
         });
       }).catch(err => {
-      console.log('Fehler: ', err);
+      console.log('Error during maps api initialization: ', err);
     });
   }
 
@@ -48,12 +51,19 @@ export class LocationService {
       })
       .flatMap(x => this.codeAirport(x))
       .subscribe(airport => {
-        this.airports.next(airport);
+        this.airportArray.push(airport);
+        this.airports.next(this.airportArray);
       });
   }
 
 
   private codeAirport(airportCode: string): Observable<Airport> {
+    const fromCache = this.storage.getAirport(airportCode);
+    if (fromCache) {
+      console.log(`From cache: ${airportCode}`);
+      return Observable.of(fromCache);
+    }
+
     return Observable.create(obs => {
       console.log(`loading airport '${airportCode}'`);
       this.geocoder.geocode({
@@ -90,6 +100,7 @@ export class LocationService {
           return marker;
         }
       })
+      .do(apt => this.storage.setAirport(apt))
       .retryWhen(errors => errors
         .do(val => console.log(`Error for ${airportCode}`, val))
           .delayWhen(val => Observable.timer(Math.random() * 4000)));

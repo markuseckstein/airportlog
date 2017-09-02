@@ -1,28 +1,30 @@
 <h1>Airport Log</h1>
-<agm-map
-  [latitude]="lat"
-  [longitude]="lng"
-  [zoom]="zoom">
+<!--<agm-map-->
+  <!--[latitude]="lat"-->
+  <!--[longitude]="lng"-->
+  <!--[zoom]="zoom">-->
 
-  <agm-marker
-    *ngFor="let m of markers"
-    (markerClick)="clickedMarker(m)"
-    [latitude]="m.lat"
-    [longitude]="m.lng"
-    [title]="m.code">
-    <agm-info-window>
-      <h2>{{m.title}}</h2>
-      {{m.label}}
-    </agm-info-window>
-  </agm-marker>
+  <!--<agm-marker-->
+    <!--*ngFor="let m of markers"-->
+    <!--(markerClick)="clickedMarker(m)"-->
+    <!--[latitude]="m.lat"-->
+    <!--[longitude]="m.lng"-->
+    <!--[title]="m.code">-->
+    <!--<agm-info-window>-->
+      <!--<h2>{{m.title}}</h2>-->
+      <!--{{m.label}}-->
+    <!--</agm-info-window>-->
+  <!--</agm-marker>-->
 
-</agm-map>
+<!--</agm-map>-->
+
+<app-map [class.small]="isSmall" [markers]="locationService.airports$ | async" (selectAirport)="selectedAirport = $event"></app-map>
 
 <hr/>
 <p>
-  Number of loaded airports: {{markers.length}}
+  Number of loaded airports: {{(locationService.airports$ | async)?.length}}, isSmall {{isSmall}} {{selectedAirport}}
 </p>
 <p>Selected Airport: <strong>{{selectedAirport?.label}}</strong></p>
-<p *ngFor="let marker of markers">
+<p *ngFor="let marker of locationService.airports$ | async">
   <span class="code">{{marker.code}}</span><span>: {{marker.label}} ({{marker.lat}}/{{marker.lng}})</span>
 </p>
