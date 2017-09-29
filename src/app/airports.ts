@@ -8,6 +8,7 @@ export const airportCodes: string[] = [
   'DAD',
   'DEL',
   'DXB',
+  'EDPO Neumarkt',
   'FRA',
   'FUK',
   'HAN',
