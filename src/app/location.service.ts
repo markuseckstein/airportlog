@@ -34,6 +34,7 @@ export class LocationService {
   reload(): void {
     this.storage.clearCache();
     this.airportArray.length = 0;
+    this.airports.next([]);
     this.loadAirports();
   }
 
@@ -72,7 +73,7 @@ export class LocationService {
     )
     .subscribe(airport => {
       this.airportArray.push(airport);
-      this.airports.next(this.airportArray);
+      this.airports.next(this.airportArray.slice());
     });
   }
 
@@ -106,8 +107,8 @@ export class LocationService {
           const marker: Airport = {
             code: airportCode,
             allData: results[0].address_components,
+            name: results[0].address_components[0].long_name,
             label: results[0].formatted_address,
-            title: airportCode,
             lat: results[0].geometry.location.lat(),
             lng: results[0].geometry.location.lng(),
           };

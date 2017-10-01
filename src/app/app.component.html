@@ -24,8 +24,15 @@
 <p>
   Number of loaded airports: {{(locationService.airports$ | async)?.length}}
 </p>
-<p>Selected Airport: <strong>{{selectedAirport?.label}}</strong></p>
 <p>
-  <button (click)="onClearCache()">Clear cache / Reload</button>
+  <button md-raised-button color="primary" (click)="onClearCache()">Clear cache / Reload</button>
 </p>
-<app-airport-list [airports]="locationService.airports$ | async"></app-airport-list>
+
+<div fxLayout="row">
+  <app-airport-list [airports]="locationService.airports$ | async"></app-airport-list>
+  <md-card class="airport-card" *ngIf="selectedAirport">
+    <md-card-title>{{selectedAirport.name}} ({{selectedAirport.code}})</md-card-title>
+    <md-card-subtitle>{{selectedAirport.label}}</md-card-subtitle>
+  </md-card>
+</div>
+
