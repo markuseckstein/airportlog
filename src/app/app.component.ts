@@ -24,5 +24,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): any {
 
   }
+
+  onClearCache(): void {
+    this.locationService.reload();
+  }
 }
 

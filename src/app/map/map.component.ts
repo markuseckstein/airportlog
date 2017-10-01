@@ -1,14 +1,15 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Airport} from '../shared/airport';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Airport } from '../shared/airport';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapComponent {
   @Input() public markers: Airport[] = [];
- @Output() public selectAirport = new EventEmitter<Airport>();
+  @Output() public selectAirport = new EventEmitter<Airport>();
 
 
   // google maps zoom level

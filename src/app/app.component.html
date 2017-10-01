@@ -18,13 +18,14 @@
 
 <!--</agm-map>-->
 
-<app-map [class.small]="isSmall" [markers]="locationService.airports$ | async" (selectAirport)="selectedAirport = $event"></app-map>
+<app-map [markers]="locationService.airports$ | async" (selectAirport)="selectedAirport = $event"></app-map>
 
 <hr/>
 <p>
-  Number of loaded airports: {{(locationService.airports$ | async)?.length}}, isSmall {{isSmall}} {{selectedAirport}}
+  Number of loaded airports: {{(locationService.airports$ | async)?.length}}
 </p>
 <p>Selected Airport: <strong>{{selectedAirport?.label}}</strong></p>
-<p *ngFor="let marker of locationService.airports$ | async">
-  <span class="code">{{marker.code}}</span><span>: {{marker.label}} ({{marker.lat}}/{{marker.lng}})</span>
+<p>
+  <button (click)="onClearCache()">Clear cache / Reload</button>
 </p>
+<app-airport-list [airports]="locationService.airports$ | async"></app-airport-list>

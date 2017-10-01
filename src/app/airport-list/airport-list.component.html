@@ -1,3 +1,3 @@
-<p>
-  airport-list works!
+<p *ngFor="let marker of airports; trackBy: trackByCode">
+  <span class="code">{{marker.code}}</span><span>: {{marker.label}} ({{marker.lat}}/{{marker.lng}})</span>
 </p>

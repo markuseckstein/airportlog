@@ -31,4 +31,9 @@ export class StorageService {
     this.cache[airport.code] = airport;
     this.saveToStorage();
   }
+
+  public clearCache(): void {
+    this.cache = {};
+    window.localStorage.removeItem(this.key);
+  }
 }

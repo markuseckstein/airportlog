@@ -1,12 +1,12 @@
-import {MapsAPILoader} from '@agm/core';
-import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/timeInterval';
-import {Observable} from 'rxjs/Rx';
-import {airportCodes} from './airports';
-import {Airport} from './shared/airport';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {Subject} from 'rxjs/Subject';
-import {StorageService} from './storage/storage.service';
+import { MapsAPILoader } from '@agm/core';
+import { Injectable } from '@angular/core';
+
+import { Observable } from 'rxjs/Observable';
+import { airportCodes } from './airports';
+import { Airport } from './shared/airport';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Subject } from 'rxjs/Subject';
+import { StorageService } from './storage/storage.service';
 
 declare var google: any;
 
@@ -27,43 +27,57 @@ export class LocationService {
           this.loadAirports();
         });
       }).catch(err => {
-      console.log('Error during maps api initialization: ', err);
-    });
+        console.log('Error during maps api initialization: ', err);
+      });
   }
 
+  reload(): void {
+    this.storage.clearCache();
+    this.airportArray.length = 0;
+    this.loadAirports();
+  }
 
   private loadAirports(): void {
     // Note: this is for throtteling the geocode requests.
     // Google doesn't like batch requests on their free API.
     let counter = -1;
     let idx = 0;
-    Observable.from(airportCodes)
-      .do(() => {
-        if (idx % 6 === 0) {
-          counter++;
-        }
-        idx++;
-      })
-      .delayWhen((code: any) => {
-        const waitTime = 3050 * counter;
-        console.log(`waitTime for ${code}, idx ${counter} is ${waitTime}`);
-        return Observable.timer(waitTime);
-      })
-      .flatMap(x => this.codeAirport(x))
-      .subscribe(airport => {
-        this.airportArray.push(airport);
-        this.airports.next(this.airportArray);
-      });
+
+    const airportsFromCache: Airport[] = [];
+    const copyOfAirportCodes = airportCodes.slice();
+
+    airportCodes.slice().forEach((aptCode: string) => {
+      const apt = this.storage.getAirport(aptCode);
+      if (apt) {
+        airportsFromCache.push(apt);
+        copyOfAirportCodes.splice(copyOfAirportCodes.indexOf(aptCode), 1);
+      }
+    });
+
+    Observable.concat(
+      Observable.from(airportsFromCache),
+      Observable.from(copyOfAirportCodes)
+        .do(() => {
+          if (idx % 6 === 0) {
+            counter++;
+          }
+          idx++;
+        })
+        .delayWhen((code: any) => {
+          const waitTime = 3050 * counter;
+          console.log(`waitTime for ${code}, idx ${counter} is ${waitTime}`);
+          return Observable.timer(waitTime);
+        })
+        .flatMap(x => this.codeAirport(x))
+    )
+    .subscribe(airport => {
+      this.airportArray.push(airport);
+      this.airports.next(this.airportArray);
+    });
   }
 
 
   private codeAirport(airportCode: string): Observable<Airport> {
-    const fromCache = this.storage.getAirport(airportCode);
-    if (fromCache) {
-      console.log(`From cache: ${airportCode}`);
-      return Observable.of(fromCache);
-    }
-
     return Observable.create(obs => {
       console.log(`loading airport '${airportCode}'`);
       this.geocoder.geocode({
@@ -74,7 +88,7 @@ export class LocationService {
           obs.complete();
         } else {
           console.log('airport: ' + airportCode, status);
-          obs.error({error: status});
+          obs.error({ error: status });
         }
       });
     })
@@ -103,6 +117,6 @@ export class LocationService {
       .do(apt => this.storage.setAirport(apt))
       .retryWhen(errors => errors
         .do(val => console.log(`Error for ${airportCode}`, val))
-          .delayWhen(val => Observable.timer(Math.random() * 4000)));
+        .delayWhen(val => Observable.timer(Math.random() * 4000)));
   }
 }
