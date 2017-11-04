@@ -4,6 +4,7 @@ export const airportCodes: string[] = [
   'BOM',
   'BRU',
   'CDG',
+  'CMN',
   'CPH',
   'DAD',
   'DEL',
@@ -36,7 +37,7 @@ export const airportCodes: string[] = [
   'SFO',
   'SGN',
   'SIN',
+  'STN',
   'TXL',
-  'XIY',
-
+  'XIY'
 ];
