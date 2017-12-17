@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {LocationService} from './location.service';
 import {Airport} from './shared/airport';
 
@@ -9,7 +9,7 @@ import {Airport} from './shared/airport';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   public selectedAirport: Airport | null;
 
   public get isSmall(): boolean {
@@ -18,11 +18,6 @@ export class AppComponent implements OnInit {
 
 
   constructor(public locationService: LocationService) {
-  }
-
-
-  ngOnInit(): any {
-
   }
 
   onClearCache(): void {

@@ -1,7 +1,7 @@
 
-<md-list dense>
-  <md-list-item *ngFor="let marker of airports; trackBy: trackByCode">
-    <p mdLine><span class="code">{{marker.code}}</span><span>: {{marker.name}}</span></p>
-    <span mdLine>({{marker.lat}}/{{marker.lng}})</span>  
-  </md-list-item>
-</md-list>
+<mat-list dense>
+  <mat-list-item *ngFor="let marker of airports; trackBy: trackByCode">
+    <p matLine><span class="code">{{marker.code}}</span><span>: {{marker.name}}</span></p>
+    <span matLine>({{marker.lat}}/{{marker.lng}})</span>
+  </mat-list-item>
+</mat-list>

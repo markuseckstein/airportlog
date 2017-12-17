@@ -30,9 +30,9 @@
 
 <div fxLayout="row">
   <app-airport-list [airports]="locationService.airports$ | async"></app-airport-list>
-  <md-card class="airport-card" *ngIf="selectedAirport">
-    <md-card-title>{{selectedAirport.name}} ({{selectedAirport.code}})</md-card-title>
-    <md-card-subtitle>{{selectedAirport.label}}</md-card-subtitle>
-  </md-card>
+  <mat-card class="airport-card" *ngIf="selectedAirport">
+    <mat-card-title>{{selectedAirport.name}} ({{selectedAirport.code}})</mat-card-title>
+    <mat-card-subtitle>{{selectedAirport.label}}</mat-card-subtitle>
+  </mat-card>
 </div>
 
