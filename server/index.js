@@ -41,7 +41,9 @@ const typeDefs = gql`
   # The "Query" type is the root of all GraphQL queries.
   # (A "Mutation" type will be covered later on.)
   type Query {
-    airportSearchByCode(iata: String): Airport
+    airportSearchByCode(iataOrIcao: String): Airport
+
+    airportSearchByCodes(codes: [String]): [Airport]
 
     airportSearchFreetext(q: String): [Airport]
   }
@@ -51,13 +53,37 @@ const typeDefs = gql`
 // schema.  We'll retrieve books from the "books" array above.
 const resolvers = {
   Query: {
-    airportSearchByCode: (parent, { iata }, context, info) => {
+    airportSearchByCode: (parent, { iataOrIcao }, context, info) => {
       const airports = JSON.parse(
         fs.readFileSync(path.resolve(__dirname, "data/airport-codes.json"))
       );
-      const airport = airports.find(apt => apt.iata_code === iata);
+      const airport = airports.find(apt => {
+        if (iataOrIcao.length === 3) {
+          return apt.iata_code === iataOrIcao;
+        } else if (iataOrIcao.length === 4) {
+          return apt.ident === iataOrIcao;
+        }
+        return false;
+      });
       return airport;
     },
+    airportSearchByCodes: (parent, { codes }, context, info) => {
+      const airports = [];
+      codes.forEach(code => {
+        const airport = resolvers.Query.airportSearchByCode(
+          undefined,
+          { iataOrIcao: code },
+          context,
+          info
+        );
+        if (!airport) {
+          throw new Error(`Could not find airport with code ${airport}`);
+        }
+        airports.push(airport);
+      });
+      return airports;
+    },
+
     airportSearchFreetext: (parent, { q }, context, info) => {
       const airports = JSON.parse(
         fs.readFileSync(path.resolve(__dirname, "data/airport-codes.json"))

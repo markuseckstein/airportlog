@@ -1,17 +1,2 @@
-<agm-map
-  [latitude]="lat"
-  [longitude]="lng"
-  [zoom]="zoom">
-
-  <agm-marker
-    *ngFor="let m of markers"
-    (markerClick)="selectAirport.emit(m)"
-    [latitude]="m.lat"
-    [longitude]="m.lng"
-    [title]="m.code">
-    <agm-info-window>
-      <h2>{{m.code}}</h2>
-      {{m.label}}
-    </agm-info-window>
-  </agm-marker>
-</agm-map>
+<div class="map" leaflet [leafletOptions]="options" [leafletLayers]="layers">
+</div>

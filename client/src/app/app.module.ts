@@ -1,22 +1,23 @@
-import { AgmCoreModule } from '@agm/core';
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { AppComponent } from './app.component';
-import { MapComponent } from './map/map.component';
-import { AirportListComponent } from './airport-list/airport-list.component';
-import { StorageService } from './storage/storage.service';
-import { LocationService } from './location.service';
-import { MatListModule, MatButtonModule, MatCardModule } from '@angular/material';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from "@angular/common/http";
+import { NgModule } from "@angular/core";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatListModule
+} from "@angular/material";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { LeafletModule } from "@asymmetrik/ngx-leaflet";
+import { ApolloBoost, ApolloBoostModule } from "apollo-angular-boost";
+import { AirportListComponent } from "./airport-list/airport-list.component";
+import { AppComponent } from "./app.component";
+import { LocationService } from "./location.service";
+import { MapComponent } from "./map/map.component";
+import { StorageService } from "./storage/storage.service";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MapComponent,
-    AirportListComponent
-  ],
+  declarations: [AppComponent, MapComponent, AirportListComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -24,11 +25,17 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatButtonModule,
     MatCardModule,
     FlexLayoutModule,
-    AgmCoreModule.forRoot({ apiKey: 'AIzaSyA_lAD_OEbsMXiDdOYBsertaqgTbPKhj_E' })
+    ApolloBoostModule,
+    HttpClientModule,
+    LeafletModule.forRoot()
   ],
   providers: [LocationService, StorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  constructor(boost: ApolloBoost) {
+    boost.create({
+      uri: "http://localhost:4000/graphql"
+    });
+  }
 }
-

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { Airport } from "../shared/airport";
+import { AirportsByCodes_airportSearchByCodes } from "../shared/queries/AirportsByCodes";
 
 @Component({
   selector: "app-airport-list",
@@ -9,9 +9,9 @@ import { Airport } from "../shared/airport";
 })
 export class AirportListComponent {
   @Input()
-  airports: Airport[];
+  airports: AirportsByCodes_airportSearchByCodes[];
 
-  trackByCode(airport: Airport) {
-    return airport.code;
+  trackByCode(airport: AirportsByCodes_airportSearchByCodes) {
+    return airport.ident;
   }
 }

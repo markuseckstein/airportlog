@@ -1,13 +1,12 @@
-import {Component} from '@angular/core';
-import {LocationService} from './location.service';
-import {Airport} from './shared/airport';
-
+import { Component } from "@angular/core";
+import { Airport } from "./shared/airport";
+import { AirportService } from "./shared/airport.service";
 
 @Component({
   moduleId: module.id,
-  selector: 'app-app',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  selector: "app-app",
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.scss"]
 })
 export class AppComponent {
   public selectedAirport: Airport | null;
@@ -16,12 +15,9 @@ export class AppComponent {
     return !!this.selectedAirport;
   }
 
-
-  constructor(public locationService: LocationService) {
-  }
+  constructor(public airportService: AirportService) {}
 
   onClearCache(): void {
-    this.locationService.reload();
+    this.airportService.init();
   }
 }
-

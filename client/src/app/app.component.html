@@ -1,38 +1,20 @@
 <h1>Airport Log</h1>
-<!--<agm-map-->
-  <!--[latitude]="lat"-->
-  <!--[longitude]="lng"-->
-  <!--[zoom]="zoom">-->
 
-  <!--<agm-marker-->
-    <!--*ngFor="let m of markers"-->
-    <!--(markerClick)="clickedMarker(m)"-->
-    <!--[latitude]="m.lat"-->
-    <!--[longitude]="m.lng"-->
-    <!--[title]="m.code">-->
-    <!--<agm-info-window>-->
-      <!--<h2>{{m.title}}</h2>-->
-      <!--{{m.label}}-->
-    <!--</agm-info-window>-->
-  <!--</agm-marker>-->
 
-<!--</agm-map>-->
+<app-map [markers]="airportService.airports$ | async" (selectAirport)="selectedAirport = $event"></app-map>
 
-<app-map [markers]="locationService.airports$ | async" (selectAirport)="selectedAirport = $event"></app-map>
-
-<hr/>
+<hr />
 <p>
-  Number of loaded airports: {{(locationService.airports$ | async)?.length}}
+  Number of loaded airports: {{(airportService.airports$ | async)?.length}}
 </p>
 <p>
   <button md-raised-button color="primary" (click)="onClearCache()">Clear cache / Reload</button>
 </p>
 
 <div fxLayout="row">
-  <app-airport-list [airports]="locationService.airports$ | async"></app-airport-list>
+  <app-airport-list [airports]="airportService.airports$ | async"></app-airport-list>
   <mat-card class="airport-card" *ngIf="selectedAirport">
     <mat-card-title>{{selectedAirport.name}} ({{selectedAirport.code}})</mat-card-title>
     <mat-card-subtitle>{{selectedAirport.label}}</mat-card-subtitle>
   </mat-card>
 </div>
-

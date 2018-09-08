@@ -2,9 +2,9 @@ import { MapsAPILoader } from "@agm/core";
 import { Injectable } from "@angular/core";
 import { concat, from, Observable, ReplaySubject, Subject, timer } from "rxjs";
 import { delayWhen, flatMap, tap, map, retryWhen } from "rxjs/operators";
-import { airportCodes } from "./airports";
 import { Airport } from "./shared/airport";
 import { StorageService } from "./storage/storage.service";
+import { airportCodes } from "./shared/airports";
 
 declare var google: any;
 
