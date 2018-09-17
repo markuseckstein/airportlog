@@ -1,6 +1,8 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql, PubSub } = require("apollo-server-express");
 const fs = require("fs");
 const path = require("path");
+const express = require("express");
+const http = require("http");
 
 // This is a (sample) collection of books we'll be able to query
 // the GraphQL server for.  A more complete example might fetch
@@ -47,16 +49,25 @@ const typeDefs = gql`
 
     airportSearchFreetext(q: String): [Airport]
   }
+
+  type Subscription {
+    airportsLoaded: [Airport]
+  }
 `;
+
+const pubsub = new PubSub();
+
+const airports = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "data/airport-codes.json"))
+);
+
+const TOPIC = "APT_LOAD";
 
 // Resolvers define the technique for fetching the types in the
 // schema.  We'll retrieve books from the "books" array above.
 const resolvers = {
   Query: {
     airportSearchByCode: (parent, { iataOrIcao }, context, info) => {
-      const airports = JSON.parse(
-        fs.readFileSync(path.resolve(__dirname, "data/airport-codes.json"))
-      );
       const airport = airports.find(apt => {
         if (iataOrIcao.length === 3) {
           return apt.iata_code === iataOrIcao;
@@ -98,6 +109,11 @@ const resolvers = {
       return matches;
     }
   },
+  Subscription: {
+    airportsLoaded: {
+      subscribe: () => pubsub.asyncIterator([TOPIC])
+    }
+  },
 
   Airport: {
     elevation(parent) {
@@ -126,11 +142,28 @@ const server = new ApolloServer({
   engine: {
     apiKey: "service:markuseckstein-9774:Z-JMTIBHMXsSn-BT5Ax8aQ"
   },
-  mocks: false
+  mocks: false,
+  introspection: true,
+  playground: true
 });
 
-// This `listen` method launches a web-server.  Existing apps
-// can utilize middleware options, which we'll discuss later.
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+const app = express();
+const PORT = 4000;
+const httpServer = http.createServer(app);
+server.applyMiddleware({ app, cors: true });
+server.installSubscriptionHandlers(httpServer);
+
+// ⚠️ Pay attention to the fact that we are calling `listen` on the http server variable, and not on `app`.
+httpServer.listen(PORT, () => {
+  console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+  console.log(
+    `Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`
+  );
 });
+
+let counter = 0;
+
+setInterval(() => {
+  pubsub.publish(TOPIC, { airportsLoaded: [airports[counter]] });
+  counter++;
+}, 2000);
