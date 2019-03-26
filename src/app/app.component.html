@@ -1,0 +1,20 @@
+<h1>Airport Log</h1>
+
+
+<app-map [markers]="airportService.airports$ | async" (selectAirport)="selectedAirport = $event"></app-map>
+
+<hr />
+<p>
+  Number of loaded airports: {{(airportService.airports$ | async)?.length}}
+</p>
+<p>
+  <button md-raised-button color="primary" (click)="onClearCache()">Clear cache / Reload</button>
+</p>
+
+<div fxLayout="row">
+  <app-airport-list [airports]="airportService.airports$ | async"></app-airport-list>
+  <mat-card class="airport-card" *ngIf="selectedAirport">
+    <mat-card-title>{{selectedAirport.name}} ({{selectedAirport.code}})</mat-card-title>
+    <mat-card-subtitle>{{selectedAirport.label}}</mat-card-subtitle>
+  </mat-card>
+</div>

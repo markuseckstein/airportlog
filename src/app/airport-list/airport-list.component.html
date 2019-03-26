@@ -1,0 +1,9 @@
+<mat-list dense>
+    <mat-list-item *ngFor="let airport of airports; trackBy: trackByCode">
+        <p matLine>
+            <span class="code">{{ airport.code }}</span
+            ><span>: {{ airport.name }}</span>
+        </p>
+        <span matLine>({{ airport.lat }}/{{ airport.lng }})</span>
+    </mat-list-item>
+</mat-list>
