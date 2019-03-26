@@ -1,7 +1,6 @@
-
 workflow "Pages deploy" {
   on = "push"
-  resolves = ["Build"]
+  resolves = ["Deploy to GitHub Pages"]
 }
 
 action "NPM install" {
@@ -21,7 +20,11 @@ action "Only on master" {
   args = "branch master"
 }
 
-action "GitHub Pages Deploy" {
+action "Deploy to GitHub Pages" {
   uses = "maxheld83/ghpages@v0.2.1"
   needs = ["Build"]
+  env = {
+    BUILD_DIR = "dist/"
+  }
+  secrets = ["GH_PAT"]
 }
