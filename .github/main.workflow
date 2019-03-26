@@ -12,7 +12,7 @@ action "NPM install" {
 action "Build" {
   uses = "actions/npm@59b64a598378f31e49cb76f27d6f3312b582f680"
   needs = ["NPM install"]
-  args = "npm run build:prod"
+  runs = "npm run build:prod"
 }
 
 action "Only on master" {
