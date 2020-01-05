@@ -1,8 +1,7 @@
 export const airportCodes: string[] = [
-    'AMS',
     'AKL',
-    'WLG',
-    'HKG',
+    'AMS',
+    'BKK',
     'BOD',
     'BOM',
     'BRU',
@@ -17,9 +16,8 @@ export const airportCodes: string[] = [
     'FUK',
     'HAN',
     'HER',
-    'SOF',
-    'SMI', // Samos
     'HGH',
+    'HKG',
     'ICN',
     'JFK',
     'KUL',
@@ -27,9 +25,9 @@ export const airportCodes: string[] = [
     'LGW',
     'LPA',
     'MLE',
+    'MSQ',
     'MUC',
     'NRT',
-    'BKK',
     'NUE',
     'ORY',
     'PEK',
@@ -40,7 +38,10 @@ export const airportCodes: string[] = [
     'SFO',
     'SGN',
     'SIN',
+    'SMI', // Samos
+    'SOF',
     'STN',
     'TXL',
+    'WLG',
     'XIY'
 ];

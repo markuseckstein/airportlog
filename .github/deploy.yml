@@ -1,0 +1,18 @@
+name: Build and Publish Airportlog
+on: [push]
+
+jobs:
+    build-and-deploy:
+        name: Build and deploy
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Build the angular site
+              run: |
+                  docker run \
+                  -v ${{ github.workspace }}:/app -v ${{ github.workspace }}/build:/app/build \
+                  trion/ng-cli-karma:latest /bin/bash -c "chmod 777 /app && ng build --prod"
+            - name: List output files 1
+              run: ls -la
+            - name: List output files 2
+              run: ls -la dist
