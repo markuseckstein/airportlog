@@ -16,3 +16,9 @@ jobs:
               run: ls -la
             - name: List output files 2
               run: ls -la dist
+            - name: Deploy to GitHub Pages
+              uses: Cecilapp/GitHub-Pages-deploy@master
+              env:
+                  EMAIL: markus.eckstein@gmx.de
+                  GH_TOKEN: ${{ secrets.ACCESS_TOKEN }} # https://github.com/settings/tokens
+                  BUILD_DIR: dist/ # "_site/" by default
