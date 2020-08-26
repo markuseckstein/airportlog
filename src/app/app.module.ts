@@ -25,11 +25,11 @@ import { AgmCoreModule } from '@agm/core';
         FlexLayoutModule,
         HttpClientModule,
         AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyBMtBOOFug9a9ELRA76AkknR1biKR2KFvI'
+            apiKey: 'AIzaSyBMtBOOFug9a9ELRA76AkknR1biKR2KFvI',
         }),
-        LeafletModule.forRoot()
+        LeafletModule,
     ],
     providers: [LocationService, StorageService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
