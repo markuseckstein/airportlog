@@ -11,7 +11,7 @@ jobs:
               run: |
                   docker run \
                   -v ${{ github.workspace }}:/app -v ${{ github.workspace }}/build:/app/build \
-                  trion/ng-cli-karma:latest /bin/bash -c "chmod 777 /app && npm ci && ng build --prod"
+                  trion/ng-cli-karma:latest /bin/bash -c "chmod 777 /app && npm ci && ng build --prod --base-href airportlog"
             - name: List output files 1
               run: ls -la
             - name: List output files 2
