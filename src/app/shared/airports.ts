@@ -31,7 +31,7 @@ export const airportCodes: string[] = [
     'NUE',
     'ORY',
     'PEK',
-    'PEN',
+    'WMKP', // Penang
     'PHL',
     'PMI',
     'PVG',
