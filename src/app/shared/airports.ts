@@ -9,6 +9,7 @@ export const airportCodes: string[] = [
     'CMN',
     'CPH',
     'DAD',
+    'DAR',
     'DEL',
     'DXB',
     'EDPO', // NEUMARKT
@@ -19,7 +20,9 @@ export const airportCodes: string[] = [
     'HGH',
     'HKG',
     'ICN',
+    'IST',
     'JFK',
+    'JRO',
     'KUL',
     'LAX',
     'LGW',
@@ -43,5 +46,6 @@ export const airportCodes: string[] = [
     'STN',
     'TXL',
     'WLG',
-    'XIY'
+    'XIY',
+    'ZNZ'
 ];
