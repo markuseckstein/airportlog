@@ -1,6 +1,7 @@
 export const airportCodes: string[] = [
     'AKL',
     'AMS',
+    'ATH',
     'BKK',
     'BOD',
     'BOM',
